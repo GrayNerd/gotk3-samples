@@ -5,7 +5,7 @@ import (
 	"log"
 	_"reflect"
 	"github.com/gotk3/gotk3/gdk"
-	"unsafe"
+	//"unsafe"
 	"github.com/gotk3/gotk3/gtk"
 )
 
@@ -63,13 +63,8 @@ func main() {
 	})
 
 	// https://developer.gnome.org/gdk3/stable/gdk3-Event-Structures.html#GdkEventButton
-	eventBox.Connect("button-press-event", func(event *gtk.EventBox) {
-		
-		ev := (*gdk.Event)(unsafe.Pointer(event))
-		
-		popupMenu.PopupAtPointer(ev)  
-		
-		fmt.Println("here")
+	win.Connect("button-press-event", func(win *gtk.Window, event *gdk.Event) {
+		popupMenu.PopupAtPointer(event)  
 	})
 
 	win.ShowAll()
