@@ -1,17 +1,10 @@
 		package main
 
 import (
-	"fmt"
 	"log"
-	_"reflect"
 	"github.com/gotk3/gotk3/gdk"
-	//"unsafe"
 	"github.com/gotk3/gotk3/gtk"
 )
-
-// #cgo pkg-config: gtk+-3.0
-import "C"
-	
 
 func main() {
 	gtk.Init(nil)
@@ -30,7 +23,6 @@ func main() {
 	}
 	win.Add(eventBox)
 
-	//https://stackoverflow.com/questions/28132798/creating-a-menu-in-gtk3-c
 	popupMenu, err := gtk.MenuNew()
 	if err != nil {
 		log.Fatal("Unable to create popupMenu", err)
@@ -62,8 +54,7 @@ func main() {
 		gtk.MainQuit()
 	})
 
-	// https://developer.gnome.org/gdk3/stable/gdk3-Event-Structures.html#GdkEventButton
-	win.Connect("button-press-event", func(win *gtk.Window, event *gdk.Event) {
+	eventBox.Connect("button-press-event", func(win *gtk.Window, event *gdk.Event) {
 		popupMenu.PopupAtPointer(event)  
 	})
 

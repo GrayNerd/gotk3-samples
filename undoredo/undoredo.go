@@ -6,8 +6,6 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-var count = 2
-
 func main() {
 	gtk.Init(nil)
 
@@ -35,25 +33,34 @@ func main() {
 	if err != nil {
 		log.Fatal("Unable to create image:", err)
 	}
-	img.SetFromIconName("edit-undo", gtk.ICON_SIZE_BUTTON)
-	undoTb, err := gtk.ToolButtonNew(img, "")
+	img.SetFromIconName("document-new", gtk.ICON_SIZE_BUTTON)
+	newTb, err := gtk.ToolButtonNew(img, "")
 	if err != nil {
 		log.Fatal("Unable to create newTb:", err)
 	}
-	undoTb.SetName("undo")
-	toolbar.Insert(undoTb, -1)
+	toolbar.Insert(newTb, -1)
 
 	img, err = gtk.ImageNew()
 	if err != nil {
 		log.Fatal("Unable to create image:", err)
 	}
-	img.SetFromIconName("edit-redo", gtk.ICON_SIZE_BUTTON)
-	redoTb, err := gtk.ToolButtonNew(img, "")
+	img.SetFromIconName("document-open", gtk.ICON_SIZE_BUTTON)
+	openTb, err := gtk.ToolButtonNew(img, "")
 	if err != nil {
-		log.Fatal("Unable to create redoTb:", err)
+		log.Fatal("Unable to create openTb:", err)
 	}
-	redoTb.SetName("redo")
-	toolbar.Insert(redoTb, -1)
+	toolbar.Insert(openTb, -1)
+
+	img, err = gtk.ImageNew()
+	if err != nil {
+		log.Fatal("Unable to create image:", err)
+	}
+	img.SetFromIconName("document-save", gtk.ICON_SIZE_BUTTON)
+	saveTb, err := gtk.ToolButtonNew(img, "")
+	if err != nil {
+		log.Fatal("Unable to create saveTb:", err)
+	}
+	toolbar.Insert(saveTb, -1)
 
 	sep, err := gtk.SeparatorToolItemNew()
 	if err != nil {
@@ -74,13 +81,6 @@ func main() {
 
 	vBox.PackStart(toolbar, false, false, 5)
 
-	undoTb.Connect("clicked", func() {
-		undoRedo(undoTb, redoTb)
-	})
-	redoTb.Connect("clicked", func() {
-		undoRedo(redoTb, undoTb)
-	})
-
 	exitTb.Connect("clicked", func() {
 		gtk.MainQuit()
 	})
@@ -91,21 +91,4 @@ func main() {
 
 	win.ShowAll()
 	gtk.Main()
-}
-
-func undoRedo(btn *gtk.ToolButton, item *gtk.ToolButton) {
-	name, err := btn.GetName()
-	if err != nil {
-		log.Fatal("Unable to get button name:", err)
-	}
-	if name == "undo" {
-		count++
-	} else {
-		count--
-	}
-
-	if count < 0 || count > 5 {
-		btn.SetSensitive(false)
-		item.SetSensitive(true)
-	}
 }
